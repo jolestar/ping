@@ -4,11 +4,12 @@
 
 // taken from http://golang.org/src/pkg/net/ipraw_test.go
 
-package ping
+package main
 
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"net"
 	"os"
 	"time"
@@ -173,4 +174,19 @@ func ipv4Payload(b []byte) []byte {
 	}
 	hdrlen := int(b[0]&0x0f) << 2
 	return b[hdrlen:]
+}
+
+func main() {
+	if len(os.Args) < 2 {
+		fmt.Println("Usage: ping hostname")
+		os.Exit(1)
+	}
+	address := os.Args[1]
+	err := Pinger(address, 5)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	} else {
+		fmt.Println("success")
+	}
 }
